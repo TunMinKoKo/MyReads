@@ -12,7 +12,7 @@ class SearchBooks extends Component {
         if (searchTerm !== '') {
             BooksAPI.search(searchTerm).then((result) =>{
                 this.setState({
-                    searchBooks:result
+                    searchBooks: result.error ? [] : result
                 })
             })
         }else{
@@ -23,7 +23,7 @@ class SearchBooks extends Component {
     }
 
     render() {
-        const mergedBooks = this.state.searchBooks.map((searchBook) => {
+            const mergedBooks = this.state.searchBooks.map((searchBook) => {
             const intersectedBook = this.props.books.find((book) => {
               return book.id === searchBook.id;
             });
@@ -50,10 +50,12 @@ class SearchBooks extends Component {
             </div>
             </div>
             <div className="search-books-results">
-            <ol className="books-grid">  
-            {mergedBooks.map((book) => 
+            <ol className="books-grid">
+            {
+                mergedBooks.map((book) => 
                 <Book book={book} key={book.id} updateShelf={this.props.updateShelf}/>
-            )}
+                )
+            }
             </ol>
             </div>
             </div>
