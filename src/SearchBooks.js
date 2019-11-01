@@ -22,7 +22,19 @@ class SearchBooks extends Component {
         }
     }
 
+    checkThumbnail = () => {
+        const statebooks = this.state.searchBooks
+        statebooks.map((book) =>{
+            if (book.imageLinks === undefined) {
+                book.imageLinks = {
+                    smallThumbnail: ''
+                }
+              }
+        })
+    }
+
     render() {
+            this.checkThumbnail();
             const mergedBooks = this.state.searchBooks.map((searchBook) => {
             const intersectedBook = this.props.books.find((book) => {
               return book.id === searchBook.id;
@@ -49,15 +61,23 @@ class SearchBooks extends Component {
 
             </div>
             </div>
-            <div className="search-books-results">
-            <ol className="books-grid">
             {
-                mergedBooks.map((book) => 
-                <Book book={book} key={book.id} updateShelf={this.props.updateShelf}/>
+                (Array.isArray(mergedBooks) && mergedBooks.length)?(
+                    <div className="search-books-results">
+                        <ol className="books-grid">
+                            {
+                                mergedBooks.map((book) => 
+                                    <Book book={book} key={book.id} updateShelf={this.props.updateShelf}/>
+                                )
+                            }
+                        </ol>
+                    </div>
+                ):(
+                    <div className="search-books-results">
+                        Not Found Any Book
+                    </div>
                 )
             }
-            </ol>
-            </div>
             </div>
         );
     }
